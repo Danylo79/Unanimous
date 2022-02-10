@@ -17,6 +17,9 @@ public class UStudent {
     private boolean isCommittee;
     private List<String> jobs;
 
+    /**
+     * Loads a student profile
+     */
     public UStudent(JSONObject json) {
         this(
                 UUID.fromString((String) json.get("id")),
@@ -30,6 +33,9 @@ public class UStudent {
         );
     }
 
+    /**
+     * Creates a student profile
+     */
     public UStudent(UUID id, String username, String pin, int homeroom, int studentId, int coins, boolean isCommittee, List<String> jobs) {
         this.id = id;
         this.username = username;
@@ -39,6 +45,13 @@ public class UStudent {
         this.coins = coins;
         this.isCommittee = isCommittee;
         this.jobs = jobs;
+    }
+
+    /**
+     * Creates a default student profile
+     */
+    public UStudent(UUID id, String username, String pin, int homeroom, int studentId, List<String> jobs) {
+        this(id, username, pin, homeroom, studentId, 500, false, jobs);
     }
 
     public UUID getID() {

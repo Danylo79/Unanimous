@@ -14,12 +14,18 @@ public class UClass {
     private JsonFile json;
     private List<UStudent> students = new ArrayList<>();
 
+    /**
+     * Create a new class
+     */
     public UClass(Directory root, String homeroom) {
         this.json = new JsonFile(new Directory(root, "classes/" + homeroom), homeroom, new JsonObjectBuilder()
                 .addArray("students", new JSONArray())
                 .build());
     }
 
+    /**
+     * Loads a class
+     */
     public UClass(JsonFile json) {
         this.json = json;
         load();

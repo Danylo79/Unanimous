@@ -18,10 +18,23 @@ public class ClassManager {
         load();
     }
 
+    /**
+     * Creates a new class if one doesn't already exist
+     * @param homeroom The id of the class
+     */
     public void createClass(String homeroom) {
-        classes.add(new UClass(fileManager.root, homeroom));
+        if (getClass(homeroom) == null) {
+            classes.add(new UClass(fileManager.root, homeroom));
+        } else {
+            throw new Error("Class already exists " + homeroom);
+        }
     }
 
+    /**
+     * Gets a class
+     * @param homeroom The id of the class to get
+     * @return The class or null if it doesn't exist
+     */
     public UClass getClass(String homeroom) {
         for (UClass clazz : classes) {
             if (clazz.getHomeroom().equals(homeroom)) {
@@ -31,6 +44,10 @@ public class ClassManager {
         return null;
     }
 
+    /**
+     * Updates a class
+     * @param clazz The class to update
+     */
     public void updateClass(UClass clazz) {
         for (int i = 0; i < classes.size(); i++) {
             UClass c = classes.get(i);
@@ -40,6 +57,11 @@ public class ClassManager {
         }
     }
 
+    /**
+     * Modifies and updates a class
+     * @param homeroom The target class
+     * @param function The transformer to apply
+     */
     public void modifyClass(String homeroom, Function<UClass, UClass> function) {
         classes.forEach(clazz -> {
             if (clazz.getHomeroom().equals(homeroom)) {
