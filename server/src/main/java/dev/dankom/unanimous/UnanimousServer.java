@@ -13,23 +13,23 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @SpringBootApplication
-public class Unanimous {
+public class UnanimousServer {
     private FileManager fileManager;
     private ProfileManager profileManager;
 
-    public Unanimous() {
+    public UnanimousServer() {
         this.fileManager = new FileManager();
         this.profileManager = new ProfileManager(fileManager.profiles);
     }
 
     public void run(String[] args) {
-        SpringApplication.run(Unanimous.class, args);
+        SpringApplication.run(UnanimousServer.class, args);
 
         profileManager.addProfile(new Profile(UUID.randomUUID(), "Dankom", "1234", 710, 14, 0, false, new ArrayList<>()));
     }
 
     public static void main(String[] args) {
-        new Unanimous().run(args);
+        new UnanimousServer().run(args);
     }
 
     @Configuration
