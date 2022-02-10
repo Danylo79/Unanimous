@@ -2,7 +2,6 @@ package dev.dankom.unanimous;
 
 import dev.dankom.unanimous.file.FileManager;
 import dev.dankom.unanimous.profile.ClassManager;
-import dev.dankom.unanimous.profile.UClass;
 import dev.dankom.unanimous.profile.UStudent;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.function.Function;
 
 @SpringBootApplication
 public class UnanimousServer {
