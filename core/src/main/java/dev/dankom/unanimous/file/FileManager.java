@@ -7,7 +7,4 @@ import org.json.simple.JSONArray;
 
 public class FileManager {
     public final Directory root = new Directory("./.unanimous");
-    public final JsonFile profiles = new JsonFile(root, "profiles", new JsonObjectBuilder()
-            .addArray("profiles", new JSONArray())
-            .build());
 }

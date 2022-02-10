@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 import java.util.List;
 import java.util.UUID;
 
-public class Profile {
+public class UStudent {
     private UUID id;
     private String username;
     private String pin;
@@ -17,7 +17,7 @@ public class Profile {
     private boolean isCommittee;
     private List<String> jobs;
 
-    public Profile(JSONObject json) {
+    public UStudent(JSONObject json) {
         this(
                 UUID.fromString((String) json.get("id")),
                 (String) json.get("username"),
@@ -30,7 +30,7 @@ public class Profile {
         );
     }
 
-    public Profile(UUID id, String username, String pin, int homeroom, int studentId, int coins, boolean isCommittee, List<String> jobs) {
+    public UStudent(UUID id, String username, String pin, int homeroom, int studentId, int coins, boolean isCommittee, List<String> jobs) {
         this.id = id;
         this.username = username;
         this.pin = pin;
