@@ -15,7 +15,9 @@ public class ProfileManager {
     }
 
     public void addProfile(Profile profile) {
-        profiles.addToArray("profiles", profile.toJSON());
+        if (getProfile(profile.getID()) == null) {
+            profiles.addToArray("profiles", profile.toJSON());
+        }
     }
 
     public Profile getProfile(String name) {

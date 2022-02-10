@@ -41,7 +41,7 @@ public class Profile {
         this.jobs = jobs;
     }
 
-    public UUID getId() {
+    public UUID getID() {
         return id;
     }
 
