@@ -14,7 +14,10 @@ public class UIdentity {
     private String pin;
 
     public UIdentity(UGroup parent, JSONObject json) {
-        this(parent, parent.getProfile(UUID.fromString((String) json.get("parent"))), (String) json.get("username"), (String) json.get("pin"));
+        this.parent = parent;
+        this.profile = parent.getProfile(UUID.fromString((String) json.get("parent")));
+        this.username = (String) json.get("username");
+        this.pin = (String) json.get("pin");
     }
 
     public UIdentity(UGroup parent, UProfile profile, String username, String pin) {
@@ -50,6 +53,12 @@ public class UIdentity {
 
     public UProfile getProfile() {
         return parent.getProfile(profile.getID());
+    }
+
+    public boolean doesPinMatch(String pin) {
+        String source = this.pin;
+        String target = new Sha256().hash(pin);
+        return source.equals(target);
     }
 
     public JSONObject toJSON() {
