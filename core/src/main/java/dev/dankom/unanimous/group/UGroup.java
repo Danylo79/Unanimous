@@ -8,6 +8,7 @@ import dev.dankom.unanimous.group.profile.UProfile;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,10 @@ public class UGroup {
 
     private final List<UProfile> profiles = new ArrayList<>();
     private final List<UIdentity> identities = new ArrayList<>();
+
+    public UGroup(File groupJson) {
+        this(groupJson.getParentFile().getName(), new Directory(groupJson.getParentFile().getParentFile().getAbsolutePath()));
+    }
 
     public UGroup(String id, Directory groupDirectory) {
         this.root = new Directory(groupDirectory, id);
@@ -63,6 +68,10 @@ public class UGroup {
             }
         }
         return null;
+    }
+
+    public String getID() {
+        return (String) groupJson.get().get("id");
     }
 
     public void load() {
