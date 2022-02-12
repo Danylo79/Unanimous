@@ -2,11 +2,10 @@ package dev.dankom.unanimous.group.profile;
 
 import dev.dankom.file.json.JsonObjectBuilder;
 import dev.dankom.unanimous.group.UGroup;
+import dev.dankom.unanimous.group.transaction.UTransaction;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class UProfile {
     private UGroup parent;
@@ -32,6 +31,25 @@ public class UProfile {
         this.identities = new ArrayList<>();
         this.roles = new ArrayList<>();
         this.jobs = new ArrayList<>();
+    }
+
+    public float getBalance() {
+        float out = 0;
+        Map<UUID, UTransaction> calculated = new HashMap<>();
+        for (UTransaction transaction : parent.getTransactions()) {
+            if (!calculated.containsKey(transaction.getID())) {
+                if (transaction.getSender() == getID()) {
+                    calculated.put(transaction.getID(), transaction);
+                    out -= transaction.getAmount();
+                } else if (transaction.getReceiver() == getID()) {
+                    calculated.put(transaction.getID(), transaction);
+                    out += transaction.getAmount();
+                } else {
+                    continue;
+                }
+            }
+        }
+        return out;
     }
 
     public UGroup getParent() {
@@ -72,6 +90,10 @@ public class UProfile {
 
     public void addJob(String job) {
         jobs.add(job);
+    }
+
+    public boolean shouldCheckFunds() {
+        return true;
     }
 
     public JSONObject toJSON() {

@@ -5,6 +5,7 @@ import dev.dankom.file.json.JsonObjectBuilder;
 import dev.dankom.file.type.Directory;
 import dev.dankom.unanimous.group.profile.UIdentity;
 import dev.dankom.unanimous.group.profile.UProfile;
+import dev.dankom.unanimous.group.transaction.UTransaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -19,9 +20,11 @@ public class UGroup {
     private final JsonFile groupJson;
     private final JsonFile profilesJson;
     private final JsonFile identitiesJson;
+    private final JsonFile ledgerJson;
 
     private final List<UProfile> profiles = new ArrayList<>();
     private final List<UIdentity> identities = new ArrayList<>();
+    private final List<UTransaction> transactions = new ArrayList<>();
 
     public UGroup(File groupJson) {
         this(groupJson.getParentFile().getName(), new Directory(groupJson.getParentFile().getParentFile().getAbsolutePath()));
@@ -41,6 +44,10 @@ public class UGroup {
                 .addKeyValuePair("parent", id)
                 .addArray("identities", new JSONArray())
                 .build());
+        this.ledgerJson = new JsonFile(root, "ledger", new JsonObjectBuilder()
+                .addKeyValuePair("parent", id)
+                .addArray("transactions", new JSONArray())
+                .build());
     }
 
     public void addProfile(UProfile profile) {
@@ -49,6 +56,10 @@ public class UGroup {
 
     public void addIdentity(UIdentity identity) {
         identities.add(identity);
+    }
+
+    public void addTransaction(UTransaction transaction) {
+        transactions.add(transaction);
     }
 
     public UIdentity getIdentity(UProfile profile) {
@@ -81,6 +92,18 @@ public class UGroup {
         return null;
     }
 
+    public List<UProfile> getProfiles() {
+        return profiles;
+    }
+
+    public List<UIdentity> getIdentities() {
+        return identities;
+    }
+
+    public List<UTransaction> getTransactions() {
+        return transactions;
+    }
+
     public String getID() {
         return (String) groupJson.get().get("id");
     }
@@ -92,6 +115,10 @@ public class UGroup {
 
         for (Object o : (JSONArray) identitiesJson.get().get("identities")) {
             identities.add(new UIdentity((JSONObject) o));
+        }
+
+        for (Object o : (JSONArray) ledgerJson.get().get("transactions")) {
+            transactions.add(new UTransaction((String) o));
         }
     }
 
@@ -107,5 +134,11 @@ public class UGroup {
             identities.add(identity.toJSON());
         }
         identitiesJson.set("identities", identities);
+
+        JSONArray transactions = new JSONArray();
+        for (UTransaction identity : this.transactions) {
+            transactions.add(identity.toString());
+        }
+        ledgerJson.set("transactions", transactions);
     }
 }

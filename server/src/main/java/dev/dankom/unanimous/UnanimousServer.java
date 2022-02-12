@@ -6,17 +6,16 @@ import dev.dankom.logger.abztract.DefaultLogger;
 import dev.dankom.logger.interfaces.ILogger;
 import dev.dankom.operation.operations.ShutdownOperation;
 import dev.dankom.unanimous.file.FileManager;
+import dev.dankom.unanimous.group.profile.UIdentity;
+import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.manager.ClassManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.UUID;
 
 @SpringBootApplication
 public class UnanimousServer {
@@ -35,7 +34,27 @@ public class UnanimousServer {
     }
 
     public void run(String[] args) {
-        SpringApplication.run(UnanimousServer.class, args);
+//        SpringApplication.run(UnanimousServer.class, args);
+
+        try {
+            classManager.addClass("710");
+            classManager.addClass("712");
+            UProfile student1 = classManager.addStudent(
+                    "710",
+                    new UProfile(classManager.getGroup("710"), UUID.randomUUID()),
+                    new UIdentity(UUID.randomUUID(), "Dankom", "1234")
+            );
+            UProfile student2 = classManager.addStudent(
+                    "712",
+                    new UProfile(classManager.getGroup("712"), UUID.randomUUID()),
+                    new UIdentity(UUID.randomUUID(), "John", "4321")
+            );
+            classManager.transact(student1.getID(), student2.getID(), 10, "Test");
+            System.out.println(student2.getBalance());
+            classManager.save();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
@@ -61,38 +80,4 @@ public class UnanimousServer {
             registry.addMapping("/**").allowedMethods("GET", "POST").allowedOrigins("http://local.dankom.ca:4200", "http://turtle.dankom.ca:8081").allowCredentials(true);
         }
     }
-
-//    @Configuration
-//    @EnableWebSecurity
-//    public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
-//        @Override
-//        public void configure(AuthenticationManagerBuilder auth) {
-//
-//        }
-//
-//        @Override
-//        public void configure(HttpSecurity http) {
-//            try {
-//                http
-//                        .authorizeRequests()
-//                        .anyRequest().authenticated()
-//                        .and()
-//                        .formLogin()
-//                        .loginPage("/login")
-//                        .permitAll();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-//
-//    @EnableWebMvc
-//    @ComponentScan("org.springframework.security.samples.mvc")
-//    public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
-//        @Override
-//        public void addViewControllers(ViewControllerRegistry registry) {
-//            registry.addViewController("/login").setViewName("login");
-//            registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-//        }
-//    }
 }

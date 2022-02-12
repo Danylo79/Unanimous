@@ -6,10 +6,13 @@ import dev.dankom.unanimous.file.FileManager;
 import dev.dankom.unanimous.group.UGroup;
 import dev.dankom.unanimous.group.profile.UIdentity;
 import dev.dankom.unanimous.group.profile.UProfile;
+import dev.dankom.unanimous.group.transaction.UTransaction;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class ClassManager {
     private final Directory root;
@@ -30,7 +33,20 @@ public class ClassManager {
         }
     }
 
-    public void addTeacher(UProfile profile, UIdentity... identities) {
+    public void transact(UUID sender, UUID receiver, float amount, String description) throws Exception {
+        UTransaction transaction = new UTransaction(UUID.randomUUID(), sender, receiver, new Date().getTime(), amount, description);
+
+        UProfile senderProfile = getProfileInGlobal(sender);
+        UProfile receiverProfile = getProfileInGlobal(receiver);
+        if (senderProfile.getBalance() >= amount || senderProfile.shouldCheckFunds()) {
+            senderProfile.getParent().addTransaction(transaction);
+            receiverProfile.getParent().addTransaction(transaction);
+        } else {
+            throw new Exception("Insufficient Funds");
+        }
+    }
+
+    public UProfile addTeacher(UProfile profile, UIdentity... identities) {
         UGroup teachers = getGroup("teachers");
         teachers.addProfile(profile);
 
@@ -38,9 +54,11 @@ public class ClassManager {
             teachers.addIdentity(i);
             profile.addIdentity(i.getID().toString());
         }
+
+        return profile;
     }
 
-    public void addStudent(String homeroom, UProfile profile, UIdentity... identities) {
+    public UProfile addStudent(String homeroom, UProfile profile, UIdentity... identities) {
         UGroup clazz = getGroup(homeroom);
         clazz.addProfile(profile);
 
@@ -48,6 +66,8 @@ public class ClassManager {
             clazz.addIdentity(i);
             profile.addIdentity(i.getID().toString());
         }
+
+        return profile;
     }
 
     public void addClass(String homeroom) {
@@ -62,6 +82,17 @@ public class ClassManager {
         for (UGroup group : groups) {
             if (group.getID().equals(id)) {
                 return group;
+            }
+        }
+        return null;
+    }
+
+    public UProfile getProfileInGlobal(UUID id) {
+        for (UGroup group : groups) {
+            for (UProfile profile : group.getProfiles()) {
+                if (profile.getID().equals(id)) {
+                    return profile;
+                }
             }
         }
         return null;
