@@ -2,37 +2,33 @@ package dev.dankom.unanimous.group.profile;
 
 import dev.dankom.file.json.JsonObjectBuilder;
 import dev.dankom.security.hash.hashers.Sha256;
-import dev.dankom.unanimous.group.UGroup;
 import org.json.simple.JSONObject;
 
 import java.util.UUID;
 
 public class UIdentity {
-    private final UGroup parent;
-    private UProfile profile;
+    private UUID id;
     private String username;
     private String pin;
 
-    public UIdentity(UGroup parent, JSONObject json) {
-        this.parent = parent;
-        this.profile = parent.getProfile(UUID.fromString((String) json.get("parent")));
+    public UIdentity(JSONObject json) {
+        this.id = UUID.fromString((String) json.get("id"));
         this.username = (String) json.get("username");
         this.pin = (String) json.get("pin");
     }
 
-    public UIdentity(UGroup parent, UProfile profile, String username, String pin) {
-        this.parent = parent;
-        this.profile = profile;
+    public UIdentity(UUID id, String username, String pin) {
+        this.id = id;
         this.username = username;
         this.pin = new Sha256().hash(pin);
     }
 
-    public UProfile getParent() {
-        return profile;
+    public UUID getID() {
+        return id;
     }
 
-    public void setParent(UProfile profile) {
-        this.profile = profile;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -51,10 +47,6 @@ public class UIdentity {
         this.pin = pin;
     }
 
-    public UProfile getProfile() {
-        return parent.getProfile(profile.getID());
-    }
-
     public boolean doesPinMatch(String pin) {
         String source = this.pin;
         String target = new Sha256().hash(pin);
@@ -63,7 +55,7 @@ public class UIdentity {
 
     public JSONObject toJSON() {
         return new JsonObjectBuilder()
-                .addKeyValuePair("parent", profile.getID().toString())
+                .addKeyValuePair("id", id.toString())
                 .addKeyValuePair("username", username)
                 .addKeyValuePair("pin", pin)
                 .build();

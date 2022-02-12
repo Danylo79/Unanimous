@@ -43,8 +43,11 @@ public class UGroup {
                 .build());
     }
 
-    public void addProfile(UProfile profile, UIdentity identity) {
+    public void addProfile(UProfile profile) {
         profiles.add(profile);
+    }
+
+    public void addIdentity(UIdentity identity) {
         identities.add(identity);
     }
 
@@ -54,11 +57,19 @@ public class UGroup {
 
     public UIdentity getIdentity(UUID id) {
         for (UIdentity identity : identities) {
-            if (identity.getParent().getID().equals(id)) {
+            if (identity.getID().equals(id)) {
                 return identity;
             }
         }
         return null;
+    }
+
+    public List<UIdentity> getIdentities(UProfile profile) {
+        List<UIdentity> out = new ArrayList<>();
+        for (String identity : profile.getIdentities()) {
+            out.add(getIdentity(UUID.fromString(identity)));
+        }
+        return out;
     }
 
     public UProfile getProfile(UUID id) {
@@ -80,7 +91,7 @@ public class UGroup {
         }
 
         for (Object o : (JSONArray) identitiesJson.get().get("identities")) {
-            identities.add(new UIdentity(this, (JSONObject) o));
+            identities.add(new UIdentity((JSONObject) o));
         }
     }
 

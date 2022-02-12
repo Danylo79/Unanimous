@@ -1,6 +1,7 @@
 package dev.dankom.unanimous.manager;
 
 import dev.dankom.file.type.Directory;
+import dev.dankom.unanimous.config.Configuration;
 import dev.dankom.unanimous.file.FileManager;
 import dev.dankom.unanimous.group.UGroup;
 import dev.dankom.unanimous.group.profile.UIdentity;
@@ -12,14 +13,16 @@ import java.util.List;
 
 public class ClassManager {
     private final Directory root;
+    private final Configuration configuration;
     private final List<UGroup> groups = new ArrayList<>();
 
     public ClassManager(FileManager fileManager) {
-        this(fileManager.root);
+        this(fileManager.root, new Configuration(fileManager));
     }
 
-    public ClassManager(Directory root) {
+    public ClassManager(Directory root, Configuration configuration) {
         this.root = root;
+        this.configuration = configuration;
 
         if (!new File(root, "teachers.json").exists()) {
             addGroup(new UGroup("teachers", root));
@@ -27,12 +30,24 @@ public class ClassManager {
         }
     }
 
-    public void addTeacher(UProfile profile, UIdentity identity) {
-        getGroup("teachers").addProfile(profile, identity);
+    public void addTeacher(UProfile profile, UIdentity... identities) {
+        UGroup teachers = getGroup("teachers");
+        teachers.addProfile(profile);
+
+        for (UIdentity i : identities) {
+            teachers.addIdentity(i);
+            profile.addIdentity(i.getID().toString());
+        }
     }
 
-    public void addStudent(String homeroom, UProfile profile, UIdentity identity) {
-        getGroup(homeroom).addProfile(profile, identity);
+    public void addStudent(String homeroom, UProfile profile, UIdentity... identities) {
+        UGroup clazz = getGroup(homeroom);
+        clazz.addProfile(profile);
+
+        for (UIdentity i : identities) {
+            clazz.addIdentity(i);
+            profile.addIdentity(i.getID().toString());
+        }
     }
 
     public void addClass(String homeroom) {
