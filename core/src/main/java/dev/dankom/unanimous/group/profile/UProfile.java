@@ -38,10 +38,13 @@ public class UProfile {
         Map<UUID, UTransaction> calculated = new HashMap<>();
         for (UTransaction transaction : parent.getTransactions()) {
             if (!calculated.containsKey(transaction.getID())) {
+                System.out.println("Found transaction " + transaction.getID().toString());
                 if (transaction.getSender() == getID()) {
+                    System.out.println("Used transaction " + transaction.getID().toString());
                     calculated.put(transaction.getID(), transaction);
                     out -= transaction.getAmount();
                 } else if (transaction.getReceiver() == getID()) {
+                    System.out.println("Used transaction " + transaction.getID().toString());
                     calculated.put(transaction.getID(), transaction);
                     out += transaction.getAmount();
                 } else {
@@ -49,6 +52,11 @@ public class UProfile {
                 }
             }
         }
+
+        if (shouldCheckFunds() && out <= 0) {
+            return -999999999.9999999999999999999999999999999999999999999999999999999999F;
+        }
+
         return out;
     }
 

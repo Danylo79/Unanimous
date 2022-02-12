@@ -37,20 +37,9 @@ public class UnanimousServer {
 //        SpringApplication.run(UnanimousServer.class, args);
 
         try {
-            classManager.addClass("710");
-            classManager.addClass("712");
-            UProfile student1 = classManager.addStudent(
-                    "710",
-                    new UProfile(classManager.getGroup("710"), UUID.randomUUID()),
-                    new UIdentity(UUID.randomUUID(), "Dankom", "1234")
-            );
-            UProfile student2 = classManager.addStudent(
-                    "712",
-                    new UProfile(classManager.getGroup("712"), UUID.randomUUID()),
-                    new UIdentity(UUID.randomUUID(), "John", "4321")
-            );
-            classManager.transact(student1.getID(), student2.getID(), 10, "Test");
-            System.out.println(student2.getBalance());
+            classManager.load();
+            System.out.println(classManager.getProfileInGlobal(UUID.fromString("28eee7e0-14a1-464d-9691-bf69de12e756")).getBalance());
+            System.out.println(classManager.getProfileInGlobal(UUID.fromString("db8ab989-a90f-44e5-af5c-a229cfffc7be")).getBalance());
             classManager.save();
         } catch (Exception e) {
             e.printStackTrace();
