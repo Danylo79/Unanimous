@@ -11,14 +11,14 @@
         <relativePath/>
     </parent>
 
-    <groupId>dev.dankom</groupId>
+    <groupId>dev.dankom.unanimous</groupId>
     <artifactId>Unanimous</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
 
     <modules>
-        <module>server</module>
         <module>core</module>
+        <module>server</module>
     </modules>
 
     <properties>

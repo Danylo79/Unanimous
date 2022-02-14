@@ -7,7 +7,7 @@
 
     <parent>
         <artifactId>Unanimous</artifactId>
-        <groupId>dev.dankom</groupId>
+        <groupId>dev.dankom.unanimous</groupId>
         <version>1.0</version>
     </parent>
 
@@ -18,7 +18,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>dev.dankom</groupId>
+            <groupId>dev.dankom.unanimous</groupId>
             <artifactId>core</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
