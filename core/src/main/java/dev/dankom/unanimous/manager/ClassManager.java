@@ -1,6 +1,7 @@
 package dev.dankom.unanimous.manager;
 
 import dev.dankom.file.type.Directory;
+import dev.dankom.security.hash.hashers.Sha256;
 import dev.dankom.unanimous.config.Configuration;
 import dev.dankom.unanimous.file.FileManager;
 import dev.dankom.unanimous.group.UGroup;
@@ -31,6 +32,21 @@ public class ClassManager {
             addGroup(new UGroup("teachers", root));
             save();
         }
+
+        load();
+    }
+
+    public boolean login(String username, String pin) {
+        for (UGroup group : groups) {
+            for (UProfile profile : group.getProfiles()) {
+                for (UIdentity identity : group.getIdentities(profile)) {
+                    if (identity.getUsername().equals(username) && identity.doesPinMatch(pin)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void transact(UUID sender, UUID receiver, float amount, String description) throws Exception {

@@ -6,16 +6,12 @@ import dev.dankom.logger.abztract.DefaultLogger;
 import dev.dankom.logger.interfaces.ILogger;
 import dev.dankom.operation.operations.ShutdownOperation;
 import dev.dankom.unanimous.file.FileManager;
-import dev.dankom.unanimous.group.profile.UIdentity;
-import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.manager.ClassManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.UUID;
 
 @SpringBootApplication
 public class UnanimousServer {
@@ -34,16 +30,7 @@ public class UnanimousServer {
     }
 
     public void run(String[] args) {
-//        SpringApplication.run(UnanimousServer.class, args);
-
-        try {
-            classManager.load();
-            System.out.println(classManager.getProfileInGlobal(UUID.fromString("28eee7e0-14a1-464d-9691-bf69de12e756")).getBalance());
-            System.out.println(classManager.getProfileInGlobal(UUID.fromString("db8ab989-a90f-44e5-af5c-a229cfffc7be")).getBalance());
-            classManager.save();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SpringApplication.run(UnanimousServer.class, args);
     }
 
     public static void main(String[] args) {
