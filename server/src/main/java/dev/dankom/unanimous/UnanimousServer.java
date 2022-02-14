@@ -6,12 +6,15 @@ import dev.dankom.logger.abztract.DefaultLogger;
 import dev.dankom.logger.interfaces.ILogger;
 import dev.dankom.operation.operations.ShutdownOperation;
 import dev.dankom.unanimous.file.FileManager;
+import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.manager.ClassManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.UUID;
 
 @SpringBootApplication
 public class UnanimousServer {
@@ -30,7 +33,15 @@ public class UnanimousServer {
     }
 
     public void run(String[] args) {
-        SpringApplication.run(UnanimousServer.class, args);
+//        SpringApplication.run(UnanimousServer.class, args);
+
+//        classManager.addClass("710");
+//        classManager.addClass("712");
+//
+//        UProfile student1 = classManager.createStudent("710");
+//        UProfile student2 = classManager.createStudent("712");
+//
+//        classManager.transact(student1, student2, 100, "Random");
     }
 
     public static void main(String[] args) {

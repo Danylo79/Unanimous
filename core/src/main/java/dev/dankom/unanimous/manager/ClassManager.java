@@ -49,6 +49,14 @@ public class ClassManager {
         return false;
     }
 
+    public void transact(UProfile sender, UProfile receiver, float amount, String description) {
+        try {
+            transact(sender.getID(), receiver.getID(), amount, description);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void transact(UUID sender, UUID receiver, float amount, String description) throws Exception {
         UTransaction transaction = new UTransaction(UUID.randomUUID(), sender, receiver, new Date().getTime(), amount, description);
 
@@ -72,6 +80,10 @@ public class ClassManager {
         }
 
         return profile;
+    }
+
+    public UProfile createStudent(String homeroom, UIdentity... identities) {
+        return addStudent(homeroom, new UProfile(getGroup(homeroom), UUID.randomUUID()), identities);
     }
 
     public UProfile addStudent(String homeroom, UProfile profile, UIdentity... identities) {
