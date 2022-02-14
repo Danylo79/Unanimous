@@ -5,7 +5,9 @@ import dev.dankom.unanimous.group.UGroup;
 import dev.dankom.unanimous.group.transaction.UTransaction;
 import org.json.simple.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class UProfile {
     private UGroup parent;
@@ -35,21 +37,13 @@ public class UProfile {
 
     public float getBalance() {
         float out = 0;
-        Map<UUID, UTransaction> calculated = new HashMap<>();
         for (UTransaction transaction : parent.getTransactions()) {
-            if (!calculated.containsKey(transaction.getID())) {
-                System.out.println("Found transaction " + transaction.getID().toString());
-                if (transaction.getSender() == getID()) {
-                    System.out.println("Used transaction " + transaction.getID().toString());
-                    calculated.put(transaction.getID(), transaction);
-                    out -= transaction.getAmount();
-                } else if (transaction.getReceiver() == getID()) {
-                    System.out.println("Used transaction " + transaction.getID().toString());
-                    calculated.put(transaction.getID(), transaction);
-                    out += transaction.getAmount();
-                } else {
-                    continue;
-                }
+            if (transaction.getSender().equals(getID())) {
+                out -= transaction.getAmount();
+            } else if (transaction.getReceiver().equals(getID())) {
+                out += transaction.getAmount();
+            } else {
+                continue;
             }
         }
 
