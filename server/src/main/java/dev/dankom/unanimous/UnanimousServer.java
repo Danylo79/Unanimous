@@ -5,11 +5,17 @@ import dev.dankom.logger.LogManager;
 import dev.dankom.logger.abztract.DefaultLogger;
 import dev.dankom.logger.interfaces.ILogger;
 import dev.dankom.operation.operations.ShutdownOperation;
+import dev.dankom.unanimous.auth.UAuthenticationProvider;
 import dev.dankom.unanimous.file.FileManager;
 import dev.dankom.unanimous.manager.ClassManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -56,7 +62,22 @@ public class UnanimousServer {
     public class WebConfig implements WebMvcConfigurer {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/**").allowedMethods("GET", "POST").allowedOrigins("http://local.dankom.ca:4200", "http://turtle.dankom.ca:8081").allowCredentials(true);
+            registry.addMapping("/**")
+                    .allowedMethods("GET", "POST")
+                    .allowedOrigins("http://local.dankom.ca:4200", "http://turtle.dankom.ca:8081")
+                    .allowCredentials(true);
+        }
+    }
+
+    @Configuration
+    @ComponentScan("com.baeldung.security")
+    public class SecurityConfig extends WebSecurityConfigurerAdapter {
+        @Autowired
+        private UAuthenticationProvider authProvider = new UAuthenticationProvider();
+
+        @Override
+        public void configure(AuthenticationManagerBuilder auth) {
+            auth.authenticationProvider(authProvider);
         }
     }
 }
