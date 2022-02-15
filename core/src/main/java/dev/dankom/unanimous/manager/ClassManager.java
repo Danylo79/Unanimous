@@ -36,6 +36,8 @@ public class ClassManager {
     }
 
     public boolean login(String username, String pin) {
+        if (username.equals(null) || pin.equals(null)) return false;
+
         for (UGroup group : groups) {
             for (UProfile profile : group.getProfiles()) {
                 for (UIdentity identity : group.getIdentities(profile)) {
@@ -61,7 +63,7 @@ public class ClassManager {
 
         UProfile senderProfile = getProfileInGlobal(sender);
         UProfile receiverProfile = getProfileInGlobal(receiver);
-        if (senderProfile.getBalance() >= amount || senderProfile.shouldCheckFunds()) {
+        if (senderProfile.getBalance() >= amount || !senderProfile.shouldCheckFunds()) {
             senderProfile.getParent().addTransaction(transaction);
             receiverProfile.getParent().addTransaction(transaction);
         } else {
@@ -79,6 +81,10 @@ public class ClassManager {
         }
 
         return profile;
+    }
+
+    public UProfile createStudent(String homeroom, String username, String pin) {
+        return createStudent(homeroom, new UIdentity(UUID.randomUUID(), username, pin));
     }
 
     public UProfile createStudent(String homeroom, UIdentity... identities) {

@@ -95,12 +95,24 @@ public class UProfile {
     }
 
     public boolean shouldCheckFunds() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "UProfile{" +
+                "parent=" + parent +
+                ", id=" + id +
+                ", identities=" + identities +
+                ", roles=" + roles +
+                ", jobs=" + jobs +
+                '}';
     }
 
     public JSONObject toJSON() {
         JsonObjectBuilder builder = new JsonObjectBuilder();
         builder.addKeyValuePair("id", id.toString());
+        builder.addArray("identities", identities);
         builder.addArray("roles", roles);
         builder.addArray("jobs", jobs);
         return builder.build();

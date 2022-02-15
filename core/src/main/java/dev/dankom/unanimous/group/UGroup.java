@@ -118,7 +118,6 @@ public class UGroup {
         }
 
         for (Object o : (JSONArray) ledgerJson.get().get("transactions")) {
-            System.out.println("Loading " + o);
             transactions.add(new UTransaction((String) o));
         }
     }

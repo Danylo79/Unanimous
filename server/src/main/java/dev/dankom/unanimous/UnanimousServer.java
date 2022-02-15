@@ -31,6 +31,9 @@ public class UnanimousServer {
 
     public void run(String[] args) {
         SpringApplication.run(UnanimousServer.class, args);
+
+//        classManager.addClass("710");
+//        classManager.createStudent("710", "Dankom", "1234");
     }
 
     public static void main(String[] args) {

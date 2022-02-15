@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class AuthenticationRest {
     @PostMapping("/profile/login")
-    public void login(String successUrl, String failureUrl, String username, String pin, HttpServletResponse res) {
+    public void login(String username, String pin, HttpServletResponse res) {
         try {
             if (UnanimousServer.getInstance().getClassManager().login(username, pin)) {
                 res.addCookie(new Cookie("unanimous", new Sha256().hash(username + "-" + pin)));
-                res.sendRedirect(successUrl);
+                res.setStatus(200);
             } else {
-                res.sendRedirect(failureUrl);
+                res.sendError(401);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -53,6 +53,15 @@ public class UIdentity {
         return source.equals(target);
     }
 
+    @Override
+    public String toString() {
+        return "UIdentity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", pin='" + pin + '\'' +
+                '}';
+    }
+
     public JSONObject toJSON() {
         return new JsonObjectBuilder()
                 .addKeyValuePair("id", id.toString())
