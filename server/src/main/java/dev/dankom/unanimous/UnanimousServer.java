@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -29,7 +28,7 @@ public class UnanimousServer {
 
     public UnanimousServer() {
         this.fileManager = new FileManager();
-        this.classManager = new ClassManager(fileManager);
+        this.classManager = new ClassManager(fileManager, (failedTransaction, throwable) -> throwable.printStackTrace());
         instance = this;
 
         new ShutdownOperation(new ThreadMethodRunner(() -> classManager.save()), "shutdown-save", logger);
@@ -39,7 +38,11 @@ public class UnanimousServer {
         SpringApplication.run(UnanimousServer.class, args);
 
 //        classManager.addClass("710");
-//        classManager.createStudent("710", "Dankom", "1234");
+//        classManager.addClass("712");
+//        UProfile student1 = classManager.createStudent("710", "Dankom", "1234");
+//        UProfile student2 = classManager.createStudent("712", "John", "4321");
+
+//        classManager.transact(student1, student2, 100, "Thread Safe Test");
     }
 
     public static void main(String[] args) {

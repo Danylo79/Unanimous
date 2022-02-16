@@ -54,6 +54,10 @@ public class UTransaction {
         return description;
     }
 
+    public boolean isMine(UUID id) {
+        return getSender().equals(id) || getReceiver().equals(id);
+    }
+
     @Override
     public String toString() {
         return id.toString() + ":" + sender.toString() + ":" + receiver.toString() + ":" + time + ":" + amount + ":" + description;

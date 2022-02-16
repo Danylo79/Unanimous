@@ -7,25 +7,35 @@ import dev.dankom.unanimous.group.UGroup;
 import dev.dankom.unanimous.group.profile.UIdentity;
 import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.group.transaction.UTransaction;
+import dev.dankom.unanimous.transaction.ThreadSafeTransactor;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class ClassManager {
     private final Directory root;
     private final Configuration configuration;
+    private final ThreadSafeTransactor transactor;
     private final List<UGroup> groups = new ArrayList<>();
 
-    public ClassManager(FileManager fileManager) {
-        this(fileManager.root, new Configuration(fileManager));
+    public ClassManager(FileManager fileManager, BiConsumer<UTransaction, Throwable> errorHandler) {
+        this(fileManager.root, new Configuration(fileManager), errorHandler);
     }
 
-    public ClassManager(Directory root, Configuration configuration) {
+    public ClassManager(Directory root, Configuration configuration, BiConsumer<UTransaction, Throwable> errorHandler) {
         this.root = root;
         this.configuration = configuration;
+        this.transactor = new ThreadSafeTransactor(this) {
+            @Override
+            public void exceptionCaught(UTransaction failedTransaction, Throwable throwable) {
+                errorHandler.accept(failedTransaction, throwable);
+            }
+        };
 
         if (!new File(root, "teachers.json").exists()) {
             addGroup(new UGroup("teachers", root));
@@ -36,8 +46,6 @@ public class ClassManager {
     }
 
     public boolean login(String username, String pin) {
-        if (username.equals(null) || pin.equals(null)) return false;
-
         for (UGroup group : groups) {
             for (UProfile profile : group.getProfiles()) {
                 for (UIdentity identity : group.getIdentities(profile)) {
@@ -59,16 +67,7 @@ public class ClassManager {
     }
 
     public void transact(UUID sender, UUID receiver, float amount, String description) throws Exception {
-        UTransaction transaction = new UTransaction(UUID.randomUUID(), sender, receiver, new Date().getTime(), amount, description);
-
-        UProfile senderProfile = getProfileInGlobal(sender);
-        UProfile receiverProfile = getProfileInGlobal(receiver);
-        if (senderProfile.getBalance() >= amount || !senderProfile.shouldCheckFunds()) {
-            senderProfile.getParent().addTransaction(transaction);
-            receiverProfile.getParent().addTransaction(transaction);
-        } else {
-            throw new Exception("Insufficient Funds");
-        }
+        transactor.queueTransaction(new UTransaction(UUID.randomUUID(), sender, receiver, new Date().getTime(), amount, description));
     }
 
     public UProfile addTeacher(UProfile profile, UIdentity... identities) {
