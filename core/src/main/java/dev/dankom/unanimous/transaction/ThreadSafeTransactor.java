@@ -6,23 +6,23 @@ import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.group.transaction.UTransaction;
 import dev.dankom.unanimous.manager.ClassManager;
 
-import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-public abstract class ThreadSafeTransactor {
+public class ThreadSafeTransactor {
     private Queue<UTransaction> transactQueue = new LinkedBlockingQueue<>();
     private ClassManager classManager;
     private boolean running = false;
 
     public ThreadSafeTransactor(ClassManager classManager) {
         this.classManager = classManager;
+        start();
     }
 
     public void queueTransaction(UTransaction transaction) {
         transactQueue.add(transaction);
-
         if (!running) {
             start();
         }
@@ -38,14 +38,14 @@ public abstract class ThreadSafeTransactor {
                         System.out.println("Started transaction");
                         UTransaction transaction = transactQueue.remove();
                         try {
-                            UProfile senderProfile = classManager.getProfileInGlobal(transaction.getSender());
-                            UProfile receiverProfile = classManager.getProfileInGlobal(transaction.getReceiver());
-                            if (senderProfile.getBalance() >= transaction.getAmount() || !senderProfile.shouldCheckFunds()) {
-                                senderProfile.getParent().addTransaction(transaction);
-                                receiverProfile.getParent().addTransaction(transaction);
+                            UProfile sender = classManager.getProfileInGlobal(transaction.getSender());
+                            UProfile receiver = classManager.getProfileInGlobal(transaction.getReceiver());
+                            if (sender.getBalance() >= transaction.getAmount() || !sender.shouldCheckFunds()) {
+                                sender.getParent().addTransaction(transaction);
+                                receiver.getParent().addTransaction(transaction);
                                 classManager.save();
                             } else {
-                                exceptionCaught(transaction, new InsufficientFundsException(senderProfile));
+                                exceptionCaught(transaction, new InsufficientFundsException(sender));
                             }
                         } catch (Exception e) {
                             exceptionCaught(transaction, new TransactionFailureException(e));
@@ -62,5 +62,5 @@ public abstract class ThreadSafeTransactor {
         running = false;
     }
 
-    public abstract void exceptionCaught(UTransaction failedTransaction, Throwable throwable);
+    public void exceptionCaught(UTransaction transaction, Throwable throwable) {}
 }

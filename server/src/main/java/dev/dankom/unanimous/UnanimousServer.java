@@ -7,6 +7,7 @@ import dev.dankom.logger.interfaces.ILogger;
 import dev.dankom.operation.operations.ShutdownOperation;
 import dev.dankom.unanimous.auth.UAuthenticationProvider;
 import dev.dankom.unanimous.file.FileManager;
+import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.manager.ClassManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +29,7 @@ public class UnanimousServer {
 
     public UnanimousServer() {
         this.fileManager = new FileManager();
-        this.classManager = new ClassManager(fileManager, (failedTransaction, throwable) -> throwable.printStackTrace());
+        this.classManager = new ClassManager(fileManager);
         instance = this;
 
         new ShutdownOperation(new ThreadMethodRunner(() -> classManager.save()), "shutdown-save", logger);
@@ -37,11 +38,13 @@ public class UnanimousServer {
     public void run(String[] args) {
         SpringApplication.run(UnanimousServer.class, args);
 
+//        classManager.purge();
+//
 //        classManager.addClass("710");
 //        classManager.addClass("712");
 //        UProfile student1 = classManager.createStudent("710", "Dankom", "1234");
 //        UProfile student2 = classManager.createStudent("712", "John", "4321");
-
+//
 //        classManager.transact(student1, student2, 100, "Thread Safe Test");
     }
 

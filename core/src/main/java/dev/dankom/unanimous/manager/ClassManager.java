@@ -23,19 +23,14 @@ public class ClassManager {
     private final ThreadSafeTransactor transactor;
     private final List<UGroup> groups = new ArrayList<>();
 
-    public ClassManager(FileManager fileManager, BiConsumer<UTransaction, Throwable> errorHandler) {
-        this(fileManager.root, new Configuration(fileManager), errorHandler);
+    public ClassManager(FileManager fileManager) {
+        this(fileManager.root, new Configuration(fileManager));
     }
 
-    public ClassManager(Directory root, Configuration configuration, BiConsumer<UTransaction, Throwable> errorHandler) {
+    public ClassManager(Directory root, Configuration configuration) {
         this.root = root;
         this.configuration = configuration;
-        this.transactor = new ThreadSafeTransactor(this) {
-            @Override
-            public void exceptionCaught(UTransaction failedTransaction, Throwable throwable) {
-                errorHandler.accept(failedTransaction, throwable);
-            }
-        };
+        this.transactor = new ThreadSafeTransactor(this);
 
         if (!new File(root, "teachers.json").exists()) {
             addGroup(new UGroup("teachers", root));
@@ -128,6 +123,10 @@ public class ClassManager {
             }
         }
         return null;
+    }
+
+    public void collect(Consumer<UProfile> consumer) {
+        groups.forEach(g -> g.getProfiles().forEach(consumer));
     }
 
     public void load() {
