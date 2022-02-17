@@ -18,4 +18,8 @@ export class LoginService {
 
     return this.http.post("localhost:8080/login", body.toString(), httpOptions);
   }
+
+  public isLoggedIn(): boolean {
+    return false;
+  }
 }
