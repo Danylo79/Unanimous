@@ -16,9 +16,6 @@ export class LoginService {
     body.set('username', user.username);
     body.set('password', user.password);
 
-    return this.http.post("localhost:8080/login" , body.toString() ,  httpOptions)
-      .map((response: Response) => {
-        
-    });
+    return this.http.post("localhost:8080/login", body.toString(), httpOptions);
   }
 }
