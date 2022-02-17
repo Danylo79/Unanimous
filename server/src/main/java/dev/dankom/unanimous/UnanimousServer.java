@@ -1,21 +1,21 @@
 package dev.dankom.unanimous;
 
-import dev.dankom.interfaces.impl.ThreadMethodRunner;
+`import dev.dankom.interfaces.impl.ThreadMethodRunner;
 import dev.dankom.logger.LogManager;
 import dev.dankom.logger.abztract.DefaultLogger;
 import dev.dankom.logger.interfaces.ILogger;
 import dev.dankom.operation.operations.ShutdownOperation;
-import dev.dankom.unanimous.auth.UAuthenticationProvider;
 import dev.dankom.unanimous.file.FileManager;
-import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.manager.ClassManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -65,25 +65,52 @@ public class UnanimousServer {
     }
 
     @Configuration
-    public class WebConfig implements WebMvcConfigurer {
-        @Override
-        public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/**")
-                    .allowedMethods("GET", "POST")
-                    .allowedOrigins("http://local.dankom.ca:4200", "http://turtle.dankom.ca:8081")
-                    .allowCredentials(true);
-        }
-    }
-
-    @Configuration
-    @ComponentScan("com.baeldung.security")
     public class SecurityConfig extends WebSecurityConfigurerAdapter {
-        @Autowired
-        private UAuthenticationProvider authProvider = new UAuthenticationProvider();
+        @Bean
+        public WebMvcConfigurer corsConfigurer(CorsRegistry registry) {
+            return new WebMvcConfigurer() {
+                @Override
+                public void addCorsMappings(CorsRegistry registry) {
+                    registry.addMapping("/**")
+                            .allowedMethods("GET", "POST")
+                            .allowedOrigins("http://local.dankom.ca:4200", "http://turtle.dankom.ca:8081")
+                            .allowCredentials(true);
+                };
+            };
+        }
 
         @Override
-        public void configure(AuthenticationManagerBuilder auth) {
-            auth.authenticationProvider(authProvider);
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.inMemoryAuthentication()
+                    .withUser("user")
+                    .password("password");
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.cors()
+                    .and()
+                    .authorizeRequests()
+                    .antMatchers("/login")
+                    .permitAll()
+                    .anyRequest()
+                    .fullyAuthenticated()
+                    .and()
+                    .logout()
+                    .permitAll()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+                    .and()
+                    .formLogin().successHandler((request, response, authentication) -> {
+
+                    }).failureHandler((request, response, exception) -> {
+
+                    })
+                    .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .and()
+                    .csrf()
+                    .disable();
         }
     }
 }
