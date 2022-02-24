@@ -2,11 +2,12 @@ package dev.dankom.unanimous.group.profile;
 
 import dev.dankom.file.json.JsonObjectBuilder;
 import dev.dankom.security.hash.hashers.Sha256;
+import dev.dankom.unanimous.construct.IIdentity;
 import org.json.simple.JSONObject;
 
 import java.util.UUID;
 
-public class UIdentity {
+public class UIdentity implements IIdentity {
     private UUID id;
     private String username;
     private String pin;

@@ -1,12 +1,19 @@
 package dev.dankom.unanimous;
 
-`import dev.dankom.interfaces.impl.ThreadMethodRunner;
+import dev.dankom.file.json.JsonObjectBuilder;
+import dev.dankom.interfaces.impl.ThreadMethodRunner;
 import dev.dankom.logger.LogManager;
 import dev.dankom.logger.abztract.DefaultLogger;
 import dev.dankom.logger.interfaces.ILogger;
 import dev.dankom.operation.operations.ShutdownOperation;
 import dev.dankom.unanimous.file.FileManager;
+import dev.dankom.unanimous.group.profile.UIdentity;
 import dev.dankom.unanimous.manager.ClassManager;
+import dev.dankom.unanimous.query.QueryBuilder;
+import dev.dankom.unanimous.query.rule.Rule;
+import dev.dankom.unanimous.query.rule.RuleType;
+import dev.dankom.util.general.DataStructureAdapter;
+import org.json.simple.JSONArray;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +25,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.UUID;
 
 @SpringBootApplication
 public class UnanimousServer {

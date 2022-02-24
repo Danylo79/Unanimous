@@ -3,6 +3,7 @@ package dev.dankom.unanimous.group;
 import dev.dankom.file.json.JsonFile;
 import dev.dankom.file.json.JsonObjectBuilder;
 import dev.dankom.file.type.Directory;
+import dev.dankom.unanimous.construct.IGroup;
 import dev.dankom.unanimous.group.profile.UIdentity;
 import dev.dankom.unanimous.group.profile.UProfile;
 import dev.dankom.unanimous.group.transaction.UTransaction;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class UGroup {
+public class UGroup implements IGroup {
     private final Directory root;
 
     private final JsonFile groupJson;
@@ -60,10 +61,6 @@ public class UGroup {
 
     public void addTransaction(UTransaction transaction) {
         transactions.add(transaction);
-    }
-
-    public UIdentity getIdentity(UProfile profile) {
-        return getIdentity(profile.getID());
     }
 
     public UIdentity getIdentity(UUID id) {

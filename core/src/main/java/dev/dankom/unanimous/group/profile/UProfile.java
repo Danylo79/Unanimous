@@ -1,6 +1,7 @@
 package dev.dankom.unanimous.group.profile;
 
 import dev.dankom.file.json.JsonObjectBuilder;
+import dev.dankom.unanimous.construct.IProfile;
 import dev.dankom.unanimous.group.UGroup;
 import dev.dankom.unanimous.group.transaction.UTransaction;
 import org.json.simple.JSONObject;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class UProfile {
+public class UProfile implements IProfile {
     private UGroup parent;
     private UUID id;
 

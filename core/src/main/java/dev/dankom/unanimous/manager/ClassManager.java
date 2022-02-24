@@ -2,6 +2,8 @@ package dev.dankom.unanimous.manager;
 
 import dev.dankom.file.type.Directory;
 import dev.dankom.unanimous.config.Configuration;
+import dev.dankom.unanimous.construct.IGroup;
+import dev.dankom.unanimous.construct.IManager;
 import dev.dankom.unanimous.file.FileManager;
 import dev.dankom.unanimous.group.UGroup;
 import dev.dankom.unanimous.group.profile.UIdentity;
@@ -17,7 +19,7 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class ClassManager {
+public class ClassManager implements IManager {
     private final Directory root;
     private final Configuration configuration;
     private final ThreadSafeTransactor transactor;
@@ -123,6 +125,10 @@ public class ClassManager {
             }
         }
         return null;
+    }
+
+    public List<UGroup> getGroups() {
+        return groups;
     }
 
     public void collect(Consumer<UProfile> consumer) {

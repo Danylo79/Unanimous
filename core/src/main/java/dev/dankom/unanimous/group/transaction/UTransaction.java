@@ -1,8 +1,10 @@
 package dev.dankom.unanimous.group.transaction;
 
+import dev.dankom.unanimous.construct.ITransaction;
+
 import java.util.UUID;
 
-public class UTransaction {
+public class UTransaction implements ITransaction {
     private final UUID id;
     private final UUID sender;
     private final UUID receiver;
