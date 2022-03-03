@@ -16,7 +16,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { AuthInterceptor } from './login/auth.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHandler, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoginService } from './services/login.service';
 
 @NgModule({
   declarations: [
@@ -36,9 +37,13 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     MatListModule,
     MatCardModule,
     MatToolbarModule,
+    HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [{
+  providers: [
+    HttpClient,
+    LoginService,
+    {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true,
