@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../data/user';
+import { Identity } from '../data/identity';
 import { LoginService } from '../services/login.service';
 
 @Component({
@@ -17,6 +17,6 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.loginService.login(new User(this.username, this.password));
+    this.loginService.login(new Identity(this.username, this.password));
   }
 }

@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../data/user';
+import { Identity } from '../data/identity';
 
 @Injectable()
 export class LoginService {
     constructor(public http: HttpClient) { }
 
-  public login(user: User){
+  public login(user: Identity){
     const httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/x-www-form-urlencoded'
@@ -20,6 +20,6 @@ export class LoginService {
   }
 
   public isLoggedIn(): boolean {
-    return false;
+    return true;
   }
 }

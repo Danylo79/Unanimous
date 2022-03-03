@@ -14,9 +14,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
       if (!this.loginService.isLoggedIn()) {
-          this.router.navigateByUrl("/home");
-      } else {
-        this.router.navigateByUrl("/login");
+          this.router.navigateByUrl("/login");
       }
   }
 }
