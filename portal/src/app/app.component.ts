@@ -10,11 +10,13 @@ import { LoginService } from './services/login.service';
 export class AppComponent implements OnInit {
   title = 'portal';
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
+    if (window.location.pathname != "login") {
       if (!this.loginService.isLoggedIn()) {
-          this.router.navigateByUrl("/login");
+        this.router.navigateByUrl("/login");
       }
+    }
   }
 }
