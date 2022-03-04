@@ -16,9 +16,12 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AuthInterceptor } from './login/auth.interceptor';
-import { HttpClient, HttpClientModule, HttpHandler, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginService } from './services/login.service';
 import {MatFormFieldModule} from "@angular/material/form-field";
+import { FooterComponent } from './footer/footer.component';
+import { CommitteeComponent } from './committee/committee.component';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
     HomeComponent,
     ToolbarComponent,
     ProfileComponent,
-    LoginComponent
+    LoginComponent,
+    FooterComponent,
+    CommitteeComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +51,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
   providers: [
     HttpClient,
     LoginService,
+    UserService,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
