@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Identity } from '../data/identity';
-import { LoginService } from '../services/login.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Identity} from '../data/identity';
+import {LoginService} from '../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -12,32 +12,22 @@ import { LoginService } from '../services/login.service';
 export class LoginComponent implements OnInit {
   public username: any;
   public password: any;
-  public loginForm: FormGroup;
-  public loading = false;
-  public submitted = false;
+  public error: string | undefined;
   public returnUrl: string;
 
   constructor(private loginService: LoginService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) {
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   ngOnInit(): void {
-    
+
   }
 
   login(): void {
-    this.submitted = true;
-
-    if (this.loginForm.invalid) {
-      return;
+    if (this.username != null && this.password != null) {
+      this.loginService.login(new Identity(this.username, this.password));
+    } else {
+      this.error = "Please Provide a Username and Password!";
     }
-
-
-    this.loginService.login(new Identity(this.username, this.password));
   }
 }
