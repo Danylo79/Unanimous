@@ -1,15 +1,19 @@
-<mat-card class="card">
-  <div class="label title">Class Economy</div>
-  <mat-card class="label mat-error" *ngIf="error != null">{{error}}</mat-card>
-  <form class="form" name="form-signin" (ngSubmit)="login()" #f="ngForm" novalidate>
-    <div class="form-group" >
-      <label class="label" for="username">Username</label>
-      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" />
+<div class="container">
+  <mat-card class="card">
+    <div class="label title">Class Economy</div>
+    <div class="error">
+      <mat-card class="label mat-error" *ngIf="error != null">{{error}}</mat-card>
     </div>
-    <div class="form-group">
-      <label class="label" for="password">Password</label>
-      <input type="password" class="form-control" id="password" name="password" [(ngModel)]="password" />
-    </div>
-    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-  </form>
-</mat-card>
+    <form class="form" name="form-signin" (ngSubmit)="login()" #f="ngForm" novalidate>
+      <div class="form-group">
+        <label class="label" for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" />
+      </div>
+      <div class="form-group">
+        <label class="label" for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" [(ngModel)]="password" />
+      </div>
+      <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+    </form>
+  </mat-card>
+</div>

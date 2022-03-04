@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
     if (this.username != null && this.password != null) {
       this.loginService.login(new Identity(this.username, this.password));
     } else {
-      this.error = "Please Provide a Username and Password!";
+      this.error = "Invalid Username or Password";
     }
   }
 }
