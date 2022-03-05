@@ -1,8 +1,8 @@
 <div class="container">
   <mat-card class="card">
-    <div class="label title">Class Economy</div>
-    <div class="error">
-      <mat-card class="label mat-error" *ngIf="error != null">{{error}}</mat-card>
+    <div class="title">Class Economy</div>
+    <div class="label error">
+      <mat-card class="mat-error" *ngIf="error != null">{{error}}</mat-card>
     </div>
     <form class="form" name="form-signin" (ngSubmit)="login()" #f="ngForm" novalidate>
       <div class="form-group">

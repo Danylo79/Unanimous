@@ -1,13 +1,18 @@
 <app-toolbar></app-toolbar>
-<div class="container">
-    <mat-card class="card">
-        <div class="label">Username: {{user.username}}</div>
-        <div class="label">Homeroom: {{user.homeroom}}</div>
-        <div class="label">StudentID: {{user.studentID}}</div>
+<mat-grid-list cols="2" rowHeight="2:1" gutterSize="20px">
+  <mat-grid-tile>
+    <mat-card>
+      <div class="icon">
+        <mat-icon [inline]="true">person</mat-icon>
+      </div>
+      <div>Welcome {{user.username}}!</div>
+      <div>{{user.homeroom + "-" + user.studentID}}</div>
     </mat-card>
-    <div class="spacer">
-        <mat-card class="card">
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card>
 
-        </mat-card>
-    </div>
-    <app-footer></app-footer>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+<app-footer></app-footer>

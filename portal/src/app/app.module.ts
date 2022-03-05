@@ -22,6 +22,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import { FooterComponent } from './footer/footer.component';
 import { CommitteeComponent } from './committee/committee.component';
 import { UserService } from './services/user.service';
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @NgModule({
   declarations: [
@@ -33,21 +34,22 @@ import { UserService } from './services/user.service';
     FooterComponent,
     CommitteeComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatGridListModule,
-    MatListModule,
-    MatCardModule,
-    MatToolbarModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    FormsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatGridListModule,
+        MatListModule,
+        MatCardModule,
+        MatToolbarModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatSidenavModule
+    ],
   providers: [
     HttpClient,
     LoginService,
